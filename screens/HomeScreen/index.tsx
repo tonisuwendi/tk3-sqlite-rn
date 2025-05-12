@@ -1,26 +1,47 @@
-import { Image, StyleSheet, View } from 'react-native'
+import { Alert, Image, StyleSheet, View } from 'react-native'
 import { FAB, Text } from 'react-native-paper'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import SearchBar from './components/SearchBar';
 import MamaList from './components/MamaList';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useCallback, useState } from 'react';
-import { getAllMamas } from '@/database/mamaDatabase';
 import { IMama } from '@/types/mama';
+import { supabase } from '@/utils/supabase';
+import { useAuth } from '@clerk/clerk-expo';
 
 export default function HomeScreen() {
   const [mamaList, setMamaList] = useState<IMama[]>([]);
   const [searchValue, setSearchValue] = useState('');
   const router = useRouter();
+  const { userId } = useAuth();
 
   const handleGetAllMamas = async () => {
-    const mamas = await getAllMamas();
-    setMamaList(mamas);
+    try {
+      const { data: mamas, error } = await supabase.from('mamas').select('*').eq('user_id', userId);
+
+      if (error) {
+        Alert.alert(
+          'Error',
+          'Terjadi kesalahan saat mengambil data mama. Silakan coba lagi.',
+        );
+        console.error('Error fetching mamas:', error.message);
+        return;
+      }
+
+      setMamaList(mamas);
+    } catch (error: any) {
+      Alert.alert(
+        'Error',
+        'Terjadi kesalahan saat mengambil data mama. Silakan coba lagi.',
+      );
+      console.error('Error fetching mamas:', error);
+    }
   };
 
   useFocusEffect(
     useCallback(() => {
       handleGetAllMamas();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
   );
 

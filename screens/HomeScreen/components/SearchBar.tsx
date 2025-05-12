@@ -1,12 +1,51 @@
-import { StyleSheet } from 'react-native';
-import { Text, TextInput } from 'react-native-paper';
+import { useClerk, useUser } from '@clerk/clerk-expo';
+import { Image, StyleSheet, View } from 'react-native';
+import { Menu, Text, TextInput } from 'react-native-paper';
+import * as Linking from 'expo-linking'
+import { useState } from 'react';
 
 export default function SearchBar({ value, onChange }: { value: string, onChange: (value: string) => void }) {
+  const { signOut } = useClerk();
+  const { user } = useUser();
+  const [isLoading, setLoading] = useState(false);
+  const [visibleMenu, setVisibleMenu] = useState(false);
+
+  const handleLogout = async () => {
+    setLoading(true);
+    try {
+      await signOut()
+      Linking.openURL(Linking.createURL('/'))
+    } catch (err: any) {
+      console.error(err.message)
+    } finally {
+      setVisibleMenu(false);
+      setLoading(false);
+    }
+  }
+
   return (
     <>
-      <Text variant="titleLarge" style={styles.appName}>
-        Halo Mama
-      </Text>
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Text variant="titleLarge" style={styles.appName}>
+          Halo Mama
+        </Text>
+        <Menu
+          visible={visibleMenu}
+          onDismiss={() => setVisibleMenu(false)}
+          anchor={(
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+              <Text variant="titleSmall" onPress={() => setVisibleMenu(true)}>{user?.firstName}</Text>
+              <Image
+                source={{ uri: user?.imageUrl }}
+                width={30}
+                height={30}
+                style={{ borderRadius: 50 }}
+              />
+            </View>
+          )}>
+          <Menu.Item onPress={handleLogout} title={isLoading ? 'Loading...' : 'Logout'} leadingIcon="logout" />
+        </Menu>
+      </View>
       <TextInput
         mode="outlined"
         placeholder="Cari Mama..."

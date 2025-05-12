@@ -4,8 +4,8 @@
     "slug": "mamoria",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "icon": "./assets/images/love.png",
+    "scheme": "mamoriaapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
@@ -13,7 +13,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/love.png",
         "backgroundColor": "#ffffff"
       },
       "permissions": [
@@ -24,14 +24,14 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/loven.png"
     },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/images/love.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
@@ -64,7 +64,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "7acc254f-3966-4055-9582-5507af2e6cb5"
+        "projectId": "68e38085-0673-4188-8a77-52bf463c3397"
       }
     }
   }

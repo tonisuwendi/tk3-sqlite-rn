@@ -6,7 +6,8 @@ import DetailInfo from './components/DetailInfo';
 import { useCallback, useState } from 'react';
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import { IMama } from '@/types/mama';
-import { deleteMama, getMamaById } from '@/database/mamaDatabase';
+import { supabase } from '@/utils/supabase';
+import { createFileUrl } from '@/utils/helpers';
 
 export default function DetailScreen() {
   const [visibleMenu, setVisibleMenu] = useState(false);
@@ -17,8 +18,18 @@ export default function DetailScreen() {
   const { id } = useLocalSearchParams();
 
   const handleGetMama = async (_id: number) => {
-    const mama = await getMamaById(_id);
-    setMamaData(mama);
+    const { data } = await supabase.from('mamas').select('*').eq('id', _id).single();
+    setMamaData({
+      id: data.id,
+      name: data.name,
+      age: data.age,
+      phone: data.phone,
+      pregnancyAge: data.pregnancy_age,
+      expectedBirthdate: data.expected_birthdate,
+      address: data.address,
+      note: data.note,
+      photo: createFileUrl(data.photo),
+    });
   };
 
   useFocusEffect(
@@ -28,7 +39,7 @@ export default function DetailScreen() {
   );
 
   const handleDelete = async () => {
-    await deleteMama(id ? parseInt(id as string) : 0);
+    await supabase.from('mamas').delete().eq('id', id)
     setSnackbarMsg('Data berhasil dihapus');
     setTimeout(() => {
       router.back();

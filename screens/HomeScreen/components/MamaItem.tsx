@@ -1,4 +1,5 @@
 import { IMama } from '@/types/mama';
+import { createFileUrl } from '@/utils/helpers';
 import { useRouter } from 'expo-router';
 import { Image, StyleSheet, View } from 'react-native'
 import { Button, Text } from 'react-native-paper'
@@ -10,10 +11,10 @@ export default function MamaItem({ mama }: { mama: IMama }) {
     <View style={styles.boxItem}>
       <View style={styles.boxItemHeader}>
         <Image
-          source={{ uri: mama.photo }}
-          width={50}
-          height={50}
-          style={{ borderRadius: 100 }}
+          source={{ uri: createFileUrl(mama.photo) }}
+          width={20}
+          height={20}
+          style={{ borderRadius: 100, width: 50, height: 50, backgroundColor: '#ddd' }}
         />
         <View>
           <Text variant="titleMedium">

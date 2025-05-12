@@ -7,8 +7,8 @@ export default function MainInfo({ mama }: { mama: IMama | null }) {
     <>
       <Image
         source={{ uri: mama?.photo }}
-        width={100}
-        height={100}
+        width={20}
+        height={20}
         style={styles.image}
       />
       <Text variant="titleLarge" style={styles.title}>
@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 100,
+    backgroundColor: '#ddd',
   },
   title: {
     marginTop: 20,
