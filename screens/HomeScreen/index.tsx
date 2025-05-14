@@ -28,7 +28,12 @@ export default function HomeScreen() {
         return;
       }
 
-      setMamaList(mamas);
+      const newMamas = mamas?.map((mama) => ({
+        ...mama,
+        expectedBirthdate: mama.expected_birthdate,
+        pregnancyAge: mama.pregnancy_age,
+      }));
+      setMamaList(newMamas);
     } catch (error: any) {
       Alert.alert(
         'Error',
